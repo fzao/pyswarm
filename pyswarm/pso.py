@@ -6,7 +6,7 @@ class Pso(object):
     """
     Particle Swarm Optimization class
     """
-    def __init__(self, maxiter=100, minstep=1e-8, minfunc=1e-8,
+    def __init__(self, maxiter=100, minstep=1e-6, minfunc=1e-6,
                 debug=False, verbose=False, particle_output=False):
         """
         Instantiation
@@ -172,11 +172,9 @@ class Pso(object):
         # Create a pool of processors
         if processes > 1:
             pool = mp.Pool(processes=processes)
-
-        # Calculate objective and constraints for each particle
-        if processes > 1:
+            # Compute objective and constraints for each particle
             fx = np.array(pool.map(self.func, x))
-            fs = np.array(pool.map(self.is_feasible, x))
+            # bug can't pickle: fs = np.array(pool.map(self.is_feasible, x))
         elif processes == 1:
             for i in range(S):
                 fx[i] = self.obj(x[i, :])
@@ -225,10 +223,10 @@ class Pso(object):
             # Update objectives and constraints
             if processes > 1:
                 fx = np.array(pool.map(self.func, x))
-                fs = np.array(pool.map(self.is_feasible, x))
+                # bug can't pickle: fs = np.array(pool.map(self.is_feasible, x))
             elif processes == 1:
                 for i in range(S):
-                    fx[i] = self.obj(x[i, :])
+                    fx[i] = self.func(x[i, :])
                     fs[i] = self.is_feasible(x[i, :])
             else:
                 fx = self.func(x)
@@ -254,7 +252,8 @@ class Pso(object):
                 stepsize = np.sqrt(np.sum((g - p_min)**2))
 
                 if np.abs(fg - fp[i_min]) <= self.minfunc:
-                    print('Stopping search: Swarm best objective change less than {:}'\
+                    if self.verbose:
+                        print('Stopping search: Swarm best objective change less than {:}'\
                         .format(self.minfunc))
                     if self.particle_output:
                         return{'optimal particle':p_min, 'optimal function':fp[i_min], \
@@ -262,7 +261,8 @@ class Pso(object):
                     else:
                         return p_min, fp[i_min]
                 elif stepsize <= self.minstep:
-                    print('Stopping search: Swarm best position change less than {:}'\
+                    if self.verbose:
+                        print('Stopping search: Swarm best position change less than {:}'\
                         .format(self.minstep))
                     if self.particle_output:
                         return{'optimal particle':p_min, 'optimal function':fp[i_min], \
