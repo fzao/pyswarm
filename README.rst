@@ -5,15 +5,20 @@ Particle swarm optimization (PSO) with constraint support
 The ``pyswarm`` package is a gradient-free, evolutionary optimization package 
 for python that supports constraints.
 
-What's New
-==========
+This version is a fork of the orignal module from tisimst (see: `pyswarm <https://github.com/tisimst/pyswarm>`_)
 
-This release features multiprocessing support.
+What's New in this fork?
+========================
+
+- Class object approach
+- Possibility to get all the results of the convergence phase
+- Add a third option for parallelism in order to let the user to deal with it
 
 Requirements
 ============
 
 - NumPy
+- Pathos
 
 Installation and download
 =========================
