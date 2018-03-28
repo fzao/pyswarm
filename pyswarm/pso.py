@@ -1,6 +1,6 @@
 from functools import partial
+from pathos.multiprocessing import ProcessingPool as Pool
 import numpy as np
-import multiprocessing as mp
 
 class Pso(object):
     """
@@ -104,8 +104,10 @@ class Pso(object):
             Scaling factor to search away from the swarm's best known position
             (Default: 0.5)
         :param processes: int
-            The number of processes to use to evaluate objective function and 
-            constraints (default: 1)
+            Choice for parallelism:            
+            = 1: a sequential computation is done
+            > 1: pathos module is used for multiprocessing
+            = 0: the set of particles is given to the cost function self.func for a user implemented parallelism
         :return: results of the optimal solution. None if error encountered.
             g: array
                 The swarm's best known position (optimal design)
@@ -171,10 +173,10 @@ class Pso(object):
 
         # Create a pool of processors
         if processes > 1:
-            pool = mp.Pool(processes=processes)
+            pool = Pool(nodes=processes)
             # Compute objective and constraints for each particle
             fx = np.array(pool.map(self.func, x))
-            # bug can't pickle: fs = np.array(pool.map(self.is_feasible, x))
+            fs = np.array(pool.map(self.is_feasible, x))
         elif processes == 1:
             for i in range(S):
                 fx[i] = self.obj(x[i, :])
@@ -279,7 +281,7 @@ class Pso(object):
 
         # Close the pool
         if processes > 1:
-            pool.close()
+            pool.terminate()
             pool.join()
 
         if self.verbose:

@@ -8,8 +8,8 @@ def f(x):
     return f
 
 # Define bounds on variable
-lb = [-5, -5]
-ub = [5, 5]
+lb = [-5., -5.]
+ub = [5., 5.]
 
 # Instantiation of PSO
 mypb = pso.Pso(maxiter=100, particle_output=True)
@@ -19,7 +19,7 @@ mypb.initialize(f, lb, ub)
 
 # Optimize in parallel
 swarmsize = 50
-res = mypb.optimize(swarmsize=swarmsize, processes=2)
+res = mypb.optimize(swarmsize=swarmsize, processes=4)
 
 # Save the full convergence phase on disk if necessary
 itera = int(res['convergence functions'].shape[0] / swarmsize)
