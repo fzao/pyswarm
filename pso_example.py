@@ -12,7 +12,7 @@ lb = [-5., -5.]
 ub = [5., 5.]
 
 # Instantiation of PSO
-mypb = pso.Pso(maxiter=100, particle_output=True)
+mypb = pso.Pso(maxiter=100, verbose=True, particle_output=True)
 
 # Initialize the problem
 mypb.initialize(f, lb, ub)

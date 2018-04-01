@@ -1,6 +1,7 @@
 from functools import partial
 from pathos.multiprocessing import ProcessingPool as Pool
 import numpy as np
+import logging
 
 class Pso(object):
     """
@@ -62,8 +63,8 @@ class Pso(object):
         """
         if 'function' not in str(type(func)):
             if self.debug:
-                print( '--> PSO Error!' )
-                print( '\tUnable to evaluate the function' )
+                logging.debug( '--> PSO Error!' )
+                logging.debug( '\tUnable to evaluate the function' )
             return None
         self.func = func
         self.lb = lb
@@ -122,17 +123,26 @@ class Pso(object):
             fp_save: array
                 The convergence of all the particles (cost function)
         """
+        if self.verbose:
+            level = logging.INFO
+        elif self.debug:
+            level = logging.DEBUG
+        logging.basicConfig(filename=__name__+'_log.txt',level=level,\
+            format='%(asctime)s -- %(name)s -- %(levelname)s -- %(message)s')
         if self.__ready is False:
             if self.debug:
-                print( '--> PSO Error!' )
-                print( '\tThe problem is not correctly initialized.' )
-                print( '\tRun the "initialize" method before optimizing.' )
+                logging.debug( '--> PSO Error!' )
+                logging.debug( '\tThe problem is not correctly initialized.' )
+                logging.debug( '\tRun the "initialize" method before optimizing.' )
             return None
-        assert len(self.lb)==len(self.ub), 'Lower- and upper-bounds must be the same length'
-        assert hasattr(self.func, '__call__'), 'Invalid function handle'
+        if len(self.lb) != len(self.ub):
+            logging.debug('Lower- and upper-bounds must be the same length')
+        if hasattr(self.func, '__call__') == False:
+            logging.debug('Invalid function handle')
         self.lb = np.array(self.lb)
         self.ub = np.array(self.ub)
-        assert np.all(self.ub>self.lb), 'All upper-bound values must be greater than lower-bound values'
+        if np.all(self.ub>self.lb) == True:
+        	logging.debug('All upper-bound values must be greater than lower-bound values')
        
         vhigh = np.abs(self.ub - self.lb)
         vlow = -vhigh
@@ -144,15 +154,15 @@ class Pso(object):
         if self.f_ieqcons is None:
             if not len(self.ieqcons):
                 if self.debug:
-                    print('No constraints given.')
+                    logging.debug('No constraints given.')
                 self.cons = self._cons_none_wrapper
             else:
                 if self.debug:
-                    print('Converting ieqcons to a single constraint function')
+                    logging.debug('Converting ieqcons to a single constraint function')
                 self.cons = partial(self._cons_ieqcons_wrapper, self.ieqcons, self.args, self.kwargs)
         else:
             if self.debug:
-                print('Single constraint function given in f_ieqcons')
+                logging.debug('Single constraint function given in f_ieqcons')
             self.cons = partial(self._cons_f_ieqcons_wrapper, self.f_ieqcons, self.args, self.kwargs)
         self.is_feasible = partial(self._is_feasible_wrapper, self.cons)
 
@@ -247,7 +257,7 @@ class Pso(object):
             i_min = np.argmin(fp)
             if fp[i_min] < fg:
                 if self.verbose:
-                    print('New best for swarm at iteration {:}: {:} {:}'\
+                    logging.info('New best for swarm at iteration {:}: {:} {:}'\
                         .format(it, p[i_min, :], fp[i_min]))
 
                 p_min = p[i_min, :].copy()
@@ -255,7 +265,7 @@ class Pso(object):
 
                 if np.abs(fg - fp[i_min]) <= self.minfunc:
                     if self.verbose:
-                        print('Stopping search: Swarm best objective change less than {:}'\
+                        logging.info('Stopping search: Swarm best objective change less than {:}'\
                         .format(self.minfunc))
                     if self.particle_output:
                         return{'optimal particle':p_min, 'optimal function':fp[i_min], \
@@ -264,7 +274,7 @@ class Pso(object):
                         return p_min, fp[i_min]
                 elif stepsize <= self.minstep:
                     if self.verbose:
-                        print('Stopping search: Swarm best position change less than {:}'\
+                        logging.info('Stopping search: Swarm best position change less than {:}'\
                         .format(self.minstep))
                     if self.particle_output:
                         return{'optimal particle':p_min, 'optimal function':fp[i_min], \
@@ -276,7 +286,7 @@ class Pso(object):
                     fg = fp[i_min]
 
             if self.verbose:
-                print('Best after iteration {:}: {:} {:}'.format(it, g, fg))
+                logging.info('Best after iteration {:}: {:} {:}'.format(it, g, fg))
             it += 1
 
         # Close the pool
@@ -285,17 +295,17 @@ class Pso(object):
             pool.join()
 
         if self.verbose:
-            print('Stopping search: maximum iterations reached --> {:}'.format(self.maxiter))
+            logging.info('Stopping search: maximum iterations reached --> {:}'.format(self.maxiter))
         
         if not self.is_feasible(g):
             if self.verbose:
-                print("However, the optimization couldn't find a feasible design. Sorry")
+                logging.info("However, the optimization couldn't find a feasible design. Sorry")
         if self.particle_output:
             if self.verbose:
-                print('The number of iterations is: ' + str(it))
+                logging.info('The number of iterations is: ' + str(it))
             return{'optimal particle':g, 'optimal function':fg, \
                 'convergence particles':p_save, 'convergence functions':fp_save}
         else:
             if self.verbose:
-                print('The number of iterations is: ' + str(it))
+                logging.info('The number of iterations is: ' + str(it))
             return g, fg
