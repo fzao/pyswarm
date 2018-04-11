@@ -8,6 +8,7 @@ class Pso(object):
     Particle Swarm Optimization class
     """
     def __init__(self, maxiter=100, minstep=1e-6, minfunc=1e-6,
+                omega=0.5, phip=0.5, phig=0.5, 
                 debug=False, verbose=False, particle_output=False):
         """
         Instantiation
@@ -19,6 +20,14 @@ class Pso(object):
         :param minfunc: scalar
             The minimum change of swarm's best objective value before the search
             terminates (Default: 1e-8)
+        :param omega: scalar
+            Particle velocity scaling factor (Default: 0.5)
+        :param phip: scalar
+            Scaling factor to search away from the particle's best known position
+            (Default: 0.5)
+        :param phig: scalar
+            Scaling factor to search away from the swarm's best known position
+            (Default: 0.5)
         :param debug: boolean
             If True, error messages will be displayed
             (Default: False)
@@ -26,12 +35,15 @@ class Pso(object):
             If True, progress statements will be displayed every iteration
             (Default: True)
         :param particle_output: boolean
-            get the full convergence results
+            get all the convergence results
             (Default: False)
         """
         self.maxiter = maxiter
         self.minstep = minstep
         self.minfunc = minfunc
+        self.omega = omega
+        self.phip = phip
+        self.phig = phig
         self.debug = debug
         self.verbose = verbose
         self.particle_output = particle_output
@@ -91,19 +103,11 @@ class Pso(object):
     def _cons_f_ieqcons_wrapper(self, f_ieqcons, args, kwargs, x):
         return np.array(f_ieqcons(x, *args, **kwargs))
         
-    def optimize(self, swarmsize=100, omega=0.5, phip=0.5, phig=0.5, processes=1):
+    def optimize(self, swarmsize=100, processes=1):
         """
         Perform a particle swarm optimization (PSO)
         :param swarmsize: int
             The number of particles in the swarm (Default: 100)
-        :param omega: scalar
-            Particle velocity scaling factor (Default: 0.5)
-        :param phip: scalar
-            Scaling factor to search away from the particle's best known position
-            (Default: 0.5)
-        :param phig: scalar
-            Scaling factor to search away from the swarm's best known position
-            (Default: 0.5)
         :param processes: int
             Choice for parallelism:            
             = 1: a sequential computation is done
@@ -224,7 +228,7 @@ class Pso(object):
             rg = np.random.uniform(size=(S, D))
 
             # Update the particles velocities
-            v = omega*v + phip*rp*(p - x) + phig*rg*(g - x)
+            v = self.omega*v + self.phip*rp*(p - x) + self.phig*rg*(g - x)
             # Update the particles' positions
             x = x + v
             # Correct for bound violations
