@@ -18,8 +18,13 @@ mypb = pso.Pso(maxiter=100, verbose=True, particle_output=True)
 mypb.initialize(f, lb, ub)
 
 # Optimize in parallel
-swarmsize = 50
-res = mypb.optimize(swarmsize=swarmsize, processes=4)
+#swarmsize = 50
+#res = mypb.optimize(swarmsize=swarmsize, processes=4)
+
+# Optimize in parallel
+swarmsize = 20
+x0 = np.random.uniform(lb[0],ub[0],[swarmsize, 2])
+res = mypb.optimize(x0=x0)
 
 # Save the full convergence phase on disk if necessary
 itera = int(res['convergence functions'].shape[0] / swarmsize)
@@ -35,7 +40,7 @@ convPSO = np.hstack((convX, convF, convI))
 plt.ion()
 for i in range(0, itera):
     plt.clf()
-    plt.axis([-0.1,5.1,-0.1,5.1])
+    plt.axis([-5.1,5.1,-5.1,5.1])
     plt.title('Iteration '+ str(i+1))
     plt.plot(res['convergence particles'][i*swarmsize:(i+1)*swarmsize,0], res['convergence particles'][i*swarmsize:(i+1)*swarmsize,1], '*', markersize=10)
     plt.pause(0.5)

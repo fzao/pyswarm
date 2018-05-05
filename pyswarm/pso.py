@@ -103,11 +103,13 @@ class Pso(object):
     def _cons_f_ieqcons_wrapper(self, f_ieqcons, args, kwargs, x):
         return np.array(f_ieqcons(x, *args, **kwargs))
         
-    def optimize(self, swarmsize=100, processes=1):
+    def optimize(self, swarmsize=100, x0=None, processes=1):
         """
         Perform a particle swarm optimization (PSO)
         :param swarmsize: int
             The number of particles in the swarm (Default: 100)
+        :param x0: numpy array
+            Initial positions for the particles
         :param processes: int
             Choice for parallelism:            
             = 1: a sequential computation is done
@@ -171,9 +173,13 @@ class Pso(object):
         self.is_feasible = partial(self._is_feasible_wrapper, self.cons)
 
         # Initialize the particle swarm
-        S = swarmsize
         D = len(self.lb)  # the number of dimensions each particle has
-        x = np.random.rand(S, D)  # particle positions
+        if type(x0) == np.ndarray:
+            S = x0.shape[0]
+            x = x0
+        else:
+            S = swarmsize
+            x = np.random.rand(S, D)  # particle positions
         v = np.zeros_like(x)  # particle velocities
         p = np.zeros_like(x)  # best particle positions
         fx = np.zeros(S)  # current particle function values
