@@ -13,7 +13,7 @@ What's New in this fork?
 - Class object approach
 - Possibility to get all the results of the convergence phase
 - Add a third option for parallelism in order to let the user to deal with it
-- Hotstart for the initial position of particles
+- Hot start for the initial position of particles
 
 Requirements
 ============
