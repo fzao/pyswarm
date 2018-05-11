@@ -14,6 +14,7 @@ What's New in this fork?
 - Possibility to get all the results of the convergence phase
 - Add a third option for parallelism in order to let the user to deal with it
 - Hot start for the initial position of particles
+- Python logger
 
 Requirements
 ============
