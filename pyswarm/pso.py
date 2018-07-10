@@ -258,8 +258,7 @@ class Pso(object):
             # Update objectives and constraints
             if processes > 1:
                 fx = np.array(pool.map(self.func, x))
-                # bug can't pickle:
-                # fs = np.array(pool.map(self.is_feasible, x))
+                fs = np.array(pool.map(self.is_feasible, x))
             elif processes == 1:
                 for i in range(S):
                     fx[i] = self.func(x[i, :])
