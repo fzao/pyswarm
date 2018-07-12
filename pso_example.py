@@ -20,13 +20,13 @@ mypb = pso.Pso(maxiter=100, verbose=True, particle_output=True)
 mypb.initialize(f, lb, ub)
 
 # Optimize in parallel
-swarmsize = 50
-res = mypb.optimize(swarmsize=swarmsize, processes=4)
+# swarmsize = 50
+# res = mypb.optimize(swarmsize=swarmsize, processes=4)
 
 # Optimize in parallel
-# swarmsize = 20
-# x0 = np.random.uniform(lb[0], ub[0], [swarmsize, 2])
-# res = mypb.optimize(x0=x0)
+swarmsize = 20
+x0 = np.random.uniform(lb[0], ub[0], [swarmsize, 2])
+res = mypb.optimize(x0=x0)
 
 # Save the full convergence phase on disk if necessary
 itera = int(res['convergence functions'].shape[0] / swarmsize)

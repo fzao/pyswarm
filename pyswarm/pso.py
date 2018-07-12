@@ -191,6 +191,7 @@ class Pso(object):
         else:
             S = swarmsize
             x = np.random.rand(S, D)  # particle positions
+            x = self.lb + x * (self.ub - self.lb)
         v = np.zeros_like(x)  # particle velocities
         p = np.zeros_like(x)  # best particle positions
         fx = np.zeros(S)  # current particle function values
@@ -198,9 +199,6 @@ class Pso(object):
         fp = np.ones(S)*np.inf  # best particle function values
         g = []  # best swarm position
         fg = np.inf  # best swarm position starting value
-
-        # Initialize the particle's position
-        x = self.lb + x * (self.ub - self.lb)
 
         # Create a pool of processors
         if processes > 1:
