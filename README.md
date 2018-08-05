@@ -1,14 +1,11 @@
-=========================================================
-Particle swarm optimization (PSO) with constraint support
-=========================================================
+# Particle swarm optimization (PSO) with constraint support
 
-The ``pyswarm`` package is a gradient-free, evolutionary optimization package 
+The __pyswarm__ package is a gradient-free, evolutionary optimization package 
 for python that supports constraints.
 
-This version is a fork of the orignal module from tisimst (see: `pyswarm <https://github.com/tisimst/pyswarm>`_)
+This version is a fork of the orignal module from [tisimst](https://github.com/tisimst/pyswarm)
 
-What's New in this fork?
-========================
+# What's New in this fork?
 
 - Class object approach
 - Possibility to get all the results of the convergence phase
@@ -16,47 +13,36 @@ What's New in this fork?
 - Hot start for the initial position of particles
 - Python logger
 
-Requirements
-============
+# Requirements
 
 - NumPy
 - Pathos
 
-Installation and download
-=========================
+# Installation and download
 
-See the `package homepage`_ for helpful hints relating to downloading
+See the package homepage for helpful hints relating to downloading
 and installing pyswarm.
 
 
-Source Code
-===========
+# Source Code
 
-The latest, bleeding-edge, but working, `code
-<https://github.com/tisimst/pyDOE/tree/master/pyswarm>`_
-and `documentation source
-<https://github.com/tisimst/pyswarm/tree/master/doc/>`_ are
-available `on GitHub <https://github.com/tisimst/pyswarm/>`_.
+The latest, bleeding-edge, but [working](https://github.com/tisimst/pyDOE/tree/master/pyswarm)
+and [documentation source](https://github.com/tisimst/pyswarm/tree/master/doc) are
+available on [GitHub](https://github.com/tisimst/pyswarm).
 
-Contact
-=======
+# Contact
 
 Any feedback, questions, bug reports, or success stores should
-be sent to the `author`_. I'd love to hear from you!
+be sent to the author. I'd love to hear from you!
 
-License
-=======
+# License
 
 This package is provided under two licenses:
 
-1. The *BSD License*
-2. Any other that the author approves (just ask!)
+- The [BSD License](https://en.wikipedia.org/wiki/BSD_licenses)
+- Any other that the author approves (just ask!)
 
-References
-==========
+# References
 
-- `Particle swarm optimization`_ on Wikipedia
+- Particle swarm optimization on [Wikipedia](http://en.wikipedia.org/wiki/Particle_swarm_optimization)
 
-.. _author: mailto:tisimst@gmail.com
-.. _Particle swarm optimization: http://en.wikipedia.org/wiki/Particle_swarm_optimization
-.. _package homepage: http://pythonhosted.org/pyswarm
