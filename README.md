@@ -13,6 +13,13 @@ This version is a fork of the orignal module from [tisimst](https://github.com/t
 - Hot start for the initial position of particles
 - Python logger
 
+<p align="center">
+  <img src="./doc/rzout.gif" width="800"/>
+</p>
+<p align="center">
+   <b>Convergence of 24 particles in the space of three variables for an engineering problem with Telemac 2D</b> 
+</p>
+
 # Requirements
 
 - NumPy
@@ -26,7 +33,7 @@ and installing pyswarm.
 
 # Source Code
 
-The latest, bleeding-edge, but [working](https://github.com/tisimst/pyDOE/tree/master/pyswarm)
+The latest, bleeding-edge, but working
 and [documentation source](https://github.com/tisimst/pyswarm/tree/master/doc) are
 available on [GitHub](https://github.com/tisimst/pyswarm).
 
